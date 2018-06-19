@@ -20,6 +20,10 @@ import copy
 import sys, math, re
 from collections import defaultdict
 
+import six
+from six.moves import xrange as range
+
+
 def precook(s, n=4, out=False):
     """Takes a string as input and returns an object that can be given to
     either cook_refs or cook_test. This is optional: cook_refs and cook_test
@@ -42,7 +46,7 @@ def cook_refs(refs, eff=None, n=4): ## lhuang: oracle will call with "average"
     for ref in refs:
         rl, counts = precook(ref, n)
         reflen.append(rl)
-        for (ngram,count) in counts.items():
+        for (ngram,count) in six.iteritems(counts):
             maxcounts[ngram] = max(maxcounts.get(ngram,0), count)
 
     # Calculate effective reference sentence length.
@@ -78,7 +82,7 @@ def cook_test(test, reflen_refmaxcounts, eff=None, n=4):
     result["guess"] = [max(0,testlen-k+1) for k in range(1,n+1)]
 
     result['correct'] = [0]*n
-    for (ngram, count) in counts.items():
+    for (ngram, count) in six.iteritems(counts):
         result["correct"][len(ngram)-1] += min(refmaxcounts.get(ngram,0), count)
 
     return result

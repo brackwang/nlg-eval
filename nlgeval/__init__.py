@@ -1,10 +1,14 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT license. See LICENSE.md file in the project root for full license information.
 from __future__ import print_function
+
+from six.moves import map
+
 from nlgeval.pycocoevalcap.bleu.bleu import Bleu
+from nlgeval.pycocoevalcap.cider.cider import Cider
 from nlgeval.pycocoevalcap.meteor.meteor import Meteor
 from nlgeval.pycocoevalcap.rouge.rouge import Rouge
-from nlgeval.pycocoevalcap.cider.cider import Cider
+
 
 def compute_metrics(hypothesis, references, no_overlap=False, no_skipthoughts=False, no_glove=False):
     with open(hypothesis, 'r') as f:
@@ -128,7 +132,7 @@ def compute_individual_metrics(ref, hyp, no_overlap=False, no_skipthoughts=False
     return ret_scores
 
 
-class NLGEval:
+class NLGEval(object):
     def __init__(self, no_overlap=False, no_skipthoughts=False, no_glove=False):
         self.no_overlap = no_overlap
         if not no_overlap:
@@ -209,7 +213,7 @@ class NLGEval:
         return ret_scores
 
     def compute_metrics(self, ref_list, hyp_list):
-        ref_list = [map(str.strip, refs) for refs in zip(*ref_list)]
+        ref_list = [list(map(str.strip, refs)) for refs in zip(*ref_list)]
         refs = {idx: strippedlines for (idx, strippedlines) in enumerate(ref_list)}
         hyps = {idx: [lines.strip()] for (idx, lines) in enumerate(hyp_list)}
         assert len(refs) == len(hyps)

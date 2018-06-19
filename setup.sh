@@ -9,6 +9,7 @@ function download () {
 		TGTDIR=$2
 		mkdir -p $TGTDIR
 	fi
+	echo "Downloading ${URL} to ${TGTDIR}"
 	wget $URL -P $TGTDIR
 }
 
@@ -28,13 +29,9 @@ function download_file() {
 if [ ! -f nlgeval/data/glove.6B.300d.txt ]
 then
     download http://nlp.stanford.edu/data/glove.6B.zip
-    unzip glove.6B.zip
-    rm -f glove.6B.50d.txt
-    rm -f glove.6B.100d.txt
-    rm -f glove.6B.200d.txt
+    mkdir --parents nlgeval/data
+    unzip glove.6B.zip glove.6B.300d.txt -d nlgeval/data
     rm -f glove.6B.zip
-    mkdir -p nlgeval/data
-    mv glove.6B.300d.txt nlgeval/data
 fi
 
 # skip-thoughts data
@@ -55,6 +52,6 @@ download_file https://raw.githubusercontent.com/manasRK/glove-gensim/42ce46f00e8
 
 if [ ! -f nlgeval/data/glove.6B.300d.model.bin ]
 then
-    python2.7 -m nltk.downloader punkt
-    PYTHONPATH=`pwd` python2.7 nlgeval/word2vec/generate_w2v_files.py
+    python -m nltk.downloader punkt
+    PYTHONPATH=`pwd` python nlgeval/word2vec/generate_w2v_files.py
 fi
