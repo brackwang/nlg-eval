@@ -13,7 +13,7 @@ def compute_metrics(hypothesis, references, no_overlap=False, no_skipthoughts=Fa
     for iidx, reference in enumerate(references):
         with open(reference, 'r') as f:
             ref_list.append(f.readlines())
-    ref_list = [map(str.strip, refs) for refs in zip(*ref_list)]
+    ref_list = [list(map(str.strip, refs)) for refs in zip(*ref_list)]
     refs = {idx: strippedlines for (idx, strippedlines) in enumerate(ref_list)}
     hyps = {idx: [lines.strip()] for (idx, lines) in enumerate(hyp_list)}
     assert len(refs) == len(hyps)
