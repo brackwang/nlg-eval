@@ -76,8 +76,8 @@ def load_tables():
     Load the tables
     """
     words = []
-    utable = numpy.load(os.path.join(path_to_tables, 'utable.npy'))
-    btable = numpy.load(os.path.join(path_to_tables, 'btable.npy'))
+    utable = numpy.load(os.path.join(path_to_tables, 'utable.npy'), encoding='bytes')
+    btable = numpy.load(os.path.join(path_to_tables, 'btable.npy'), encoding='bytes')
     f = open(os.path.join(path_to_tables, 'dictionary.txt'), 'rb')
     for line in f:
         words.append(line.decode('utf-8').strip())
